@@ -1,5 +1,5 @@
 # Ciphers
 
-Transopition (T)
-Reverse (R)
-Caesar (C)
+Transopition (T) <br />
+Reverse (R) <br />
+Caesar (C) <br />
