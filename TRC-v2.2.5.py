@@ -30,21 +30,6 @@ def getKey(alphabetLength):
             print('Please enter a valid key')
             key = input()
             continue
-        
-    while len(msg) != len(translated) and col <= decryptRows:
-        if outOfRange(char, msg):
-            break
-        
-        translated += msg[char]
-        char += decryptRows
-        
-        if outOfRange(char, msg):
-            if col < decryptRows:
-                col += 1
-                char = col
-                continue
-    
-    return translated
         elif len(key) > 2:
             print('Please enter a valid key')
             key = input()
