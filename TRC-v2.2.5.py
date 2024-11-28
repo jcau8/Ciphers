@@ -141,6 +141,7 @@ def reverse(message):
     return translated
     
 def caesar(mode, message, key, alphabet):
+    translated = ''
     # It does this for every character in the message
     for character in message:
         if character in alphabet:
@@ -162,8 +163,10 @@ def caesar(mode, message, key, alphabet):
         else:
             # If the translate failed for some reason just add the character anyways
             translated = translated + character
+            
+    return translated
     
-def transposition(mode, message, key):
+def transposition(mode, msg, key):
     if mode == 0:
         # Encrypt
         char = col = 0
@@ -212,13 +215,12 @@ def translate(key, mode, message, alphabet):
     if mode == 1:
         message = reverse(message)
     
-    caesar = caesar(mode, message, key, alphabet)
-    finalTranslated = transposition(mode, caesar, key)
+    translated = transposition(mode, caesar(mode, message, key, alphabet), key)
             
     if mode == 0:
         translated = reverse(translated)
         
-    return finalTranslated # Returning translated text
+    return translated # Returning translated text
        
 mode = getMode()
 alphabeticKey, spaceEncrypt = getAlphabeticKey()
