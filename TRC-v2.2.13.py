@@ -4,8 +4,6 @@ import math as m
 def outOfRange(char, msg):
     # Simple range check 
     return char >= len(msg)
-    
-
 
 def tryParseInt(string):
     # You could also use .isdigit() instead
@@ -143,6 +141,7 @@ def reverse(message):
     return translated
     
 def caesar(mode, message, key, alphabet):
+    translated = ''
     # It does this for every character in the message
     for character in message:
         if character in alphabet:
@@ -164,7 +163,51 @@ def caesar(mode, message, key, alphabet):
         else:
             # If the translate failed for some reason just add the character anyways
             translated = translated + character
+            
+    return translated
     
+def transposition(mode, msg, key):
+    if mode == 0:
+        # Encrypt
+        char = col = 0
+        translated = ''
+    
+        while char < len(message) and col < key:
+            if not outOfRange(char, message):
+                translated += message[char]
+                
+            char += key
+            
+            if outOfRange(char, message):
+                if col < key:
+                    col += 1
+                    char = col
+                    
+        return translated
+        
+    if mode == 1:
+        # Decrypt
+        translated = ''
+        char = col = 0
+        rem = len(msg) % key
+        rows = m.trunc(len(msg) / key)
+        decryptRows = rows + 1 if rem > 0 else rows
+        
+        
+        while len(msg) != len(translated) and col <= decryptRows:
+            if outOfRange(char, msg):
+                break
+            
+            translated += msg[char]
+            char += decryptRows
+            
+            if outOfRange(char, msg):
+                if col < decryptRows:
+                    col += 1
+                    char = col
+                    continue
+        
+        return translated
 
 def translate(key, mode, message, alphabet):
     translated = ''
@@ -172,8 +215,7 @@ def translate(key, mode, message, alphabet):
     if mode == 1:
         message = reverse(message)
     
-    caesar(mode, message, key, alphabet)
-    transpose(mode, message, key)
+    translated = transposition(mode, caesar(mode, message, key, alphabet), key)
             
     if mode == 0:
         translated = reverse(translated)
