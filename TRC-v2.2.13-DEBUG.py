@@ -1,4 +1,4 @@
-# Reverse Caesar cipher debug program
+# Transposition Reverse Caesar cipher Debug Program
 import math as m
 
 def outOfRange(char, msg):
@@ -134,9 +134,13 @@ def reverse(message):
     i = len(message) - 1
     while i >= 0:
         # This adds the character to the translated variable
+        print('Added reversed character: %s' % message[i])
         translated = translated + message[i]
         # i gets reduced to go to the next letter in the string
         i -= 1
+        print('New value of i: %s' % i)
+        
+    print('Final reversed message: %s' % translated)
         
     return translated
     
@@ -149,21 +153,33 @@ def caesar(mode, message, key, alphabet):
             letterNum = alphabet.find(character)
             if mode == 0:
                 letterNum += key
+                print('Mode C encrypt')
+                print('New letterNum: %s' % letterNum)
             elif mode == 1:
                 letterNum -= key
+                print('Mode C decrypt')
+                print('New letterNum: %s' %  letterNum)
             
             # Handling the wrap around
             if letterNum > len(alphabet):
+                print('Wrap around 1')
                 letterNum -= len(alphabet)
+                print('New letterNum: %s' % letterNum)
             elif letterNum < 0:
+                print('Wrap around 2')
                 letterNum += len(alphabet)
+                print('New letterNum: %s' % letterNum)
+                
             # Adding the translated text
             translated = translated + alphabet[letterNum]
+            print('C Adding: %s' % alphabet[letterNum])
             
         else:
             # If the translate failed for some reason just add the character anyways
             translated = translated + character
+            print('Failed, adding character anyways: %s' % character)
             
+    print('Final Caesar: %s' % translated)
     return translated
     
 def transposition(mode, msg, key):
