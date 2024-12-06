@@ -1,4 +1,4 @@
-# Transposition Reverse Caesar cipher Debug Program
+# Transposition Reverse Caesar cipher DEBUG Program
 import math as m
 
 def outOfRange(char, msg):
