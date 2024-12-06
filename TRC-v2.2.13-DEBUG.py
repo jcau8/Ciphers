@@ -274,7 +274,9 @@ def translate(key, mode, message, alphabet):
         message = reverse(message)
         print('Message: %s' % message)
     
-    translated = transposition(mode, caesar(mode, message, key, alphabet), key)
+    translatedCaesar = caesar(mode, message, key, alphabet)
+    print(translatedCaesar)
+    translated = transposition(mode, translatedCaesar, key)
             
     if mode == 0:
         print('Mode E, reversing message...')
