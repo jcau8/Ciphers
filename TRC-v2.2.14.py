@@ -1,4 +1,4 @@
-# Reverse Caesar cipher program
+# Transposition Reverse Caesar cipher Debug Program
 import math as m
 
 def outOfRange(char, msg):
@@ -140,13 +140,14 @@ def reverse(message):
         
     return translated
     
-def caesar(mode, message, key, alphabet):
+def caesar(code, message, key, alphabet):
     translated = ''
     # It does this for every character in the message
     for character in message:
         if character in alphabet:
             # Finding the character in the alphabet and recording the number
             letterNum = alphabet.find(character)
+            
             if mode == 0:
                 letterNum += key
             elif mode == 1:
@@ -157,6 +158,7 @@ def caesar(mode, message, key, alphabet):
                 letterNum -= len(alphabet)
             elif letterNum < 0:
                 letterNum += len(alphabet)
+                
             # Adding the translated text
             translated = translated + alphabet[letterNum]
             
@@ -172,13 +174,13 @@ def transposition(mode, msg, key):
         char = col = 0
         translated = ''
     
-        while char < len(message) and col < key:
-            if not outOfRange(char, message):
-                translated += message[char]
+        while char < len(msg) and col < key:
+            if not outOfRange(char, msg):
+                translated += msg[char]
                 
             char += key
             
-            if outOfRange(char, message):
+            if outOfRange(char, msg):
                 if col < key:
                     col += 1
                     char = col
@@ -215,8 +217,9 @@ def translate(key, mode, message, alphabet):
     if mode == 1:
         message = reverse(message)
     
-    translated = transposition(mode, caesar(mode, message, key, alphabet), key)
-            
+    translatedCaesar = caesar(mode, message, key, alphabet)
+    translated = transposition(mode, translatedCaesar, key)
+    
     if mode == 0:
         translated = reverse(translated)
         
@@ -226,9 +229,9 @@ mode = getMode()
 alphabeticKey, spaceEncrypt = getAlphabeticKey()
 alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
 key = getKey(len(alphabet))
-message = getMessage()
+gMessage = getMessage()
 
 print()
-print('Below is your translated text:')
-print(translate(key, mode, message, alphabet))
+print('Below is your translated text:\n')
+print(translate(key, mode, gMessage, alphabet))
 
