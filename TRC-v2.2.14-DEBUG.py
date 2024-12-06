@@ -206,17 +206,17 @@ def transposition(mode, msg, key):
         print('char: %s, col: %s' % (char, col))
         translated = ''
     
-        while char < len(message) and col < key:
-            if not outOfRange(char, message):
-                print('Adding %s' % message[char])
+        while char < len(msg) and col < key:
+            if not outOfRange(char, msg):
+                print('Adding %s' % msg[char])
                 print()
-                translated += message[char]
+                translated += msg[char]
                 
             char += key
             print('New char: %s' % char)
             print()
             
-            if outOfRange(char, message):
+            if outOfRange(char, msg):
                 print('Range check 2e')
                 if col < key:
                     col += 1
@@ -277,7 +277,7 @@ def translate(key, mode, message, alphabet):
     translatedCaesar = caesar(mode, message, key, alphabet)
     print(translatedCaesar)
     translated = transposition(mode, translatedCaesar, key)
-            
+    
     if mode == 0:
         print('Mode E, reversing message...')
         translated = reverse(translated)
@@ -290,9 +290,9 @@ mode = getMode()
 alphabeticKey, spaceEncrypt = getAlphabeticKey()
 alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
 key = getKey(len(alphabet))
-message = getMessage()
+gMessage = getMessage()
 
 print()
 print('Below is your translated text:\n\n')
-print(translate(key, mode, message, alphabet))
+print(translate(key, mode, gMessage, alphabet))
 
