@@ -146,10 +146,12 @@ def reverse(message):
     return translated
     
 def caesar(code, message, key, alphabet):
+    print('Caesar cipher:')
     print()
     translated = ''
     # It does this for every character in the message
     for character in message:
+        print('for loop 1c')
         if character in alphabet:
             # Finding the character in the alphabet and recording the number
             letterNum = alphabet.find(character)
@@ -158,39 +160,48 @@ def caesar(code, message, key, alphabet):
             if mode == 0:
                 letterNum += key
                 print('Mode C encrypt')
+                print('Changing letterNum by: %s' % key)
                 print('New letterNum: %s' % letterNum)
+                print()
             elif mode == 1:
                 letterNum -= key
                 print('Mode C decrypt')
+                print('Changing letterNum by: %s' % key)
                 print('New letterNum: %s' %  letterNum)
+                print()
             
             # Handling the wrap around
             if letterNum > len(alphabet):
                 print('Wrap around 1')
                 letterNum -= len(alphabet)
                 print('New letterNum: %s' % letterNum)
+                print()
             elif letterNum < 0:
                 print('Wrap around 2')
                 letterNum += len(alphabet)
                 print('New letterNum: %s' % letterNum)
+                print()
                 
             # Adding the translated text
             translated = translated + alphabet[letterNum]
             print('C Adding: %s' % alphabet[letterNum])
+            print()
             
         else:
             # If the translate failed for some reason just add the character anyways
             translated = translated + character
             print('Failed, adding character anyways: %s' % character)
+            print()
             
     print('Final Caesar: %s' % translated)
     return translated
     
 def transposition(mode, msg, key):
+    print('Transposition cipher:')
     print()
     if mode == 0:
         # Encrypt
-        print('Mode T is encrypt')
+        print('Mode T encrypt')
         char = col = 0
         print('char: %s, col: %s' % (char, col))
         translated = ''
@@ -198,10 +209,12 @@ def transposition(mode, msg, key):
         while char < len(message) and col < key:
             if not outOfRange(char, message):
                 print('Adding %s' % message[char])
+                print()
                 translated += message[char]
                 
             char += key
             print('New char: %s' % char)
+            print()
             
             if outOfRange(char, message):
                 print('Range check 2e')
@@ -209,6 +222,7 @@ def transposition(mode, msg, key):
                     col += 1
                     char = col
                     print('New char; %s, new col: %s' % (char, col))
+                    print()
                     
         print('Final encrypted transposition output: %s' % translated)
         return translated
@@ -225,6 +239,7 @@ def transposition(mode, msg, key):
         print('Rows: %s' % rows)
         decryptRows = rows + 1 if rem > 0 else rows
         print('DecryptRows: %s' % decryptRows)
+        print()
         
         
         while len(msg) != len(translated) and col <= decryptRows:
@@ -236,6 +251,7 @@ def transposition(mode, msg, key):
             print('Adding: %s' % msg[char])
             char += decryptRows
             print('New char: %s' % char)
+            print()
             
             if outOfRange(char, msg):
                 print('Range check 2d')
@@ -243,6 +259,7 @@ def transposition(mode, msg, key):
                     col += 1
                     char = col
                     print('New char: %s, col: %s' % (char, col))
+                    print()
                     continue
         
         print('Final decrypted transposition output: %s' % translated)
