@@ -145,7 +145,7 @@ def reverse(message):
         
     return translated
     
-def caesar(code, message, key, alphabet):
+def caesar(mode, message, key, alphabet):
     print('Caesar cipher:')
     print()
     translated = ''
@@ -286,7 +286,7 @@ def translate(key, mode, message, alphabet):
     print('Final fully translated message: %s' % translated)
     return translated # Returning translated text
        
-mode = getMode()
+gMode = getMode()
 alphabeticKey, spaceEncrypt = getAlphabeticKey()
 alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
 key = getKey(len(alphabet))
@@ -294,5 +294,5 @@ gMessage = getMessage()
 
 print()
 print('Below is your translated text:\n\n')
-print(translate(key, mode, gMessage, alphabet))
+print(translate(key, gMode, gMessage, alphabet))
 
