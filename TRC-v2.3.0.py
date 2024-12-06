@@ -1,5 +1,11 @@
-# Transposition Reverse Caesar cipher Debug Program
+# Transposition Reverse Caesar cipher Program
 import math as m
+import logging
+
+# Initiate logger
+log = logging.getLogger(__name__)
+logLevel = logging.WARNING
+logging.basicConfig(level=logLevel, format='%(levelname)s: %(message)s')
 
 def outOfRange(char, msg):
     # Simple range check 
@@ -132,100 +138,161 @@ def reverse(message):
     translated = ''
     
     i = len(message) - 1
+    log.debug('Value of i: %s' % i)
     while i >= 0:
         # This adds the character to the translated variable
+        log.debug('Added reversed character: %s' % message[i])
         translated = translated + message[i]
         # i gets reduced to go to the next letter in the string
         i -= 1
+        log.debug('New value of i: %s' % i)
+        
+    log.debug('Final reversed message: %s' % translated)
         
     return translated
     
-def caesar(code, message, key, alphabet):
+def caesar(mode, message, key, alphabet):
+    log.debug('Caesar cipher:')
+    log.debug(' ')
     translated = ''
     # It does this for every character in the message
     for character in message:
+        log.debug('for loop 1c')
         if character in alphabet:
             # Finding the character in the alphabet and recording the number
             letterNum = alphabet.find(character)
+            log.debug('letterNum: %s' % letterNum)
             
             if mode == 0:
                 letterNum += key
+                log.debug('Mode C encrypt')
+                log.debug('Changing letterNum by: %s' % key)
+                log.debug('New letterNum: %s' % letterNum)
+                log.debug(' ')
             elif mode == 1:
                 letterNum -= key
+                log.debug('Mode C decrypt')
+                log.debug('Changing letterNum by: %s' % key)
+                log.debug('New letterNum: %s' %  letterNum)
+                log.debug(' ')
             
             # Handling the wrap around
             if letterNum > len(alphabet):
+                log.debug('Wrap around 1')
                 letterNum -= len(alphabet)
+                log.debug('New letterNum: %s' % letterNum)
+                log.debug(' ')
             elif letterNum < 0:
+                log.debug('Wrap around 2')
                 letterNum += len(alphabet)
+                log.debug('New letterNum: %s' % letterNum)
+                log.debug(' ')
                 
             # Adding the translated text
             translated = translated + alphabet[letterNum]
+            log.debug('C Adding: %s' % alphabet[letterNum])
+            log.debug(' ')
             
         else:
             # If the translate failed for some reason just add the character anyways
             translated = translated + character
+            log.debug('Failed, adding character anyways: %s' % character)
+            log.debug(' ')
             
+    log.debug('Final Caesar: %s' % translated)
     return translated
     
 def transposition(mode, msg, key):
+    log.debug('Transposition cipher:')
+    log.debug(' ')
     if mode == 0:
         # Encrypt
+        log.debug('Mode T encrypt')
         char = col = 0
+        log.debug('char: %s, col: %s' % (char, col))
         translated = ''
     
         while char < len(msg) and col < key:
             if not outOfRange(char, msg):
+                log.debug('Adding %s' % msg[char])
+                log.debug(' ')
                 translated += msg[char]
                 
             char += key
+            log.debug('New char: %s' % char)
+            log.debug(' ')
             
             if outOfRange(char, msg):
+                log.debug('Range check 2e')
                 if col < key:
                     col += 1
                     char = col
+                    log.debug('New char; %s, new col: %s' % (char, col))
+                    log.debug(' ')
                     
+        log.debug('Final encrypted transposition output: %s' % translated)
         return translated
         
     if mode == 1:
         # Decrypt
+        log.debug('Mode T decrypt')
         translated = ''
         char = col = 0
+        log.debug('char: %s, col: %s' % (char, col))
         rem = len(msg) % key
+        log.debug('Rem: %s' % rem)
         rows = m.trunc(len(msg) / key)
+        log.debug('Rows: %s' % rows)
         decryptRows = rows + 1 if rem > 0 else rows
+        log.debug('DecryptRows: %s' % decryptRows)
+        log.debug(' ')
         
         
         while len(msg) != len(translated) and col <= decryptRows:
             if outOfRange(char, msg):
+                log.debug('Range check 1d')
                 break
             
             translated += msg[char]
+            log.debug('Adding: %s' % msg[char])
             char += decryptRows
+            log.debug('New char: %s' % char)
+            log.debug(' ')
             
             if outOfRange(char, msg):
+                log.debug('Range check 2d')
                 if col < decryptRows:
                     col += 1
                     char = col
+                    log.debug('New char: %s, col: %s' % (char, col))
+                    log.debug(' ')
                     continue
         
+        log.debug('Final decrypted transposition output: %s' % translated)
         return translated
 
 def translate(key, mode, message, alphabet):
+    log.debug(' ')
     translated = ''
     # If mode is decrypt then reverse the cipher first
     if mode == 1:
+        log.debug('Mode D, reversing message...')
         message = reverse(message)
+        log.debug('Message: %s' % message)
     
     translatedCaesar = caesar(mode, message, key, alphabet)
+    log.debug(translatedCaesar)
     translated = transposition(mode, translatedCaesar, key)
     
     if mode == 0:
+        log.debug('Mode E, reversing message...')
         translated = reverse(translated)
+        log.debug('Translated: %s' % translated)
         
+    log.debug('Final fully translated message: %s' % translated)
     return translated # Returning translated text
        
-mode = getMode()
+gMode = getMode()
 alphabeticKey, spaceEncrypt = getAlphabeticKey()
 alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
 key = getKey(len(alphabet))
@@ -233,5 +300,5 @@ gMessage = getMessage()
 
 print()
 print('Below is your translated text:\n')
-print(translate(key, mode, gMessage, alphabet))
-
+log.debug(' ')
+print(translate(key, gMode, gMessage, alphabet))
