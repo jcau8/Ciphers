@@ -9,6 +9,9 @@ With the Caesar cipher you can choose what alphabets you would like to encode in
 > [!TIP]
 > The ideal key is around half of your message's length, as longer keys than that may result in text being more understandable!
 
+## Planned Features
+The next cipher that will be incorporated into this program is the hill cipher, it is based on linear algebra. TRC v2.3.0 will be converted into batch script as well.
+
 ## Changelog
 <details open><summary><b>v2.3.0 - Dec 07, 2024</b></summary>
 <ul>
