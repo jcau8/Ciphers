@@ -1,10 +1,10 @@
 # Transposition Reverse Caesar cipher Program
-import math as m
+import numpy as np
 import logging
 
 # Initiate logger
 log = logging.getLogger(__name__)
-logLevel = logging.WARNING
+logLevel = logging.DEBUG
 logging.basicConfig(level=logLevel, format='%(levelname)s: %(message)s')
 
 def outOfRange(char, msg):
@@ -241,7 +241,7 @@ def transposition(mode, msg, key):
         log.debug('char: %s, col: %s' % (char, col))
         rem = len(msg) % key
         log.debug('Rem: %s' % rem)
-        rows = m.trunc(len(msg) / key)
+        rows = int(np.trunc(len(msg) / key))
         log.debug('Rows: %s' % rows)
         decryptRows = rows + 1 if rem > 0 else rows
         log.debug('DecryptRows: %s' % decryptRows)
