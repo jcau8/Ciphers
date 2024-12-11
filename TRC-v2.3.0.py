@@ -153,6 +153,7 @@ def reverse(message):
     
 def caesar(mode, message, key, alphabet):
     log.debug('Caesar cipher:')
+    log.debug('Alphabet=%s' % alphabet)
     log.debug(' ')
     translated = ''
     # It does this for every character in the message
