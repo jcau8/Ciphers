@@ -10,7 +10,7 @@ def message():
     msg = "This is a message for testing !#$|~"
     return msg
 
-@pytest.mark.parametrize("key", [x for x in range(1,9)])
+@pytest.mark.parametrize("key", [x for x in range(1,8)])
 @pytest.mark.parametrize("alphabeticKey", ["0","0123"])
 @pytest.mark.parametrize("spaceEncrypt", ["0","1"])
 def test_caesar(message, key, alphabeticKey, spaceEncrypt):

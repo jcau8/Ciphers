@@ -113,7 +113,7 @@ def returnAlphabet(alphabeticKey, spaceEncrypt):
     LOWERCASE = 'abcdefghijklmnopqrstuvwxyz'
     UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     NUMERIC = '1234567890'
-    SYMBOLS = '`-=[]\;,./~!@#$%^&*()_+{}|:"<>?'
+    SYMBOLS = '`-=[]\\;,./~!@#$%^&*()_+{}|:"<>?'
     SPACE = ' '
     
     finalAlphabet = ''
@@ -234,7 +234,7 @@ def transposition(mode, msg, key):
                     log.debug('New char; %s, new col: %s' % (char, col))
                     log.debug(' ')
                     
-        log.debug('Final encrypted transposition output: %s' % translated)
+        print('Final encrypted transposition output: %s' % translated)
         return translated
         
     if mode == 1:
@@ -272,7 +272,7 @@ def transposition(mode, msg, key):
                     log.debug(' ')
                     continue
         
-        log.debug('Final decrypted transposition output: %s' % translated)
+        print('Final decrypted transposition output: %s' % translated)
         return translated
 
 def translate(key, mode, message, alphabet):
