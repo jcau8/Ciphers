@@ -177,7 +177,7 @@ def caesar(mode, message, key, alphabet):
                 log.debug(' ')
             
             # Handling the wrap around
-            if letterNum > len(alphabet):
+            if letterNum >= len(alphabet):
                 log.debug('Wrap around 1')
                 letterNum -= len(alphabet)
                 log.debug('New letterNum: %s' % letterNum)
