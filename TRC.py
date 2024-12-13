@@ -189,7 +189,11 @@ def caesar(mode, message, key, alphabet):
                 log.debug(' ')
                 
             # Adding the translated text
-            translated = translated + alphabet[letterNum]
+            try:
+                translated = translated + alphabet[letterNum]
+            except IndexError:
+                print(f'Index is: {letterNum}')
+                print(f'Alphabet len is: {len(alphabet)}')
             log.debug('C Adding: %s' % alphabet[letterNum])
             log.debug(' ')
             
@@ -291,14 +295,15 @@ def translate(key, mode, message, alphabet):
         
     log.debug('Final fully translated message: %s' % translated)
     return translated # Returning translated text
-       
-gMode = getMode()
-alphabeticKey, spaceEncrypt = getAlphabeticKey()
-alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
-key = getKey(len(alphabet))
-gMessage = getMessage()
 
-print()
-print('Below is your translated text:\n')
-log.debug(' ')
-print(translate(key, gMode, gMessage, alphabet))
+if __name__ == '__main__':
+    gMode = getMode()
+    alphabeticKey, spaceEncrypt = getAlphabeticKey()
+    alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
+    key = getKey(len(alphabet))
+    gMessage = getMessage()
+
+    print()
+    print('Below is your translated text:\n')
+    log.debug(' ')
+    print(translate(key, gMode, gMessage, alphabet))
