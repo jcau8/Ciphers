@@ -26,8 +26,9 @@ def test_caesar(message, key, alphabeticKey, spaceEncrypt):
 @pytest.mark.parametrize("key", [x for x in range(1,9)])
 @pytest.mark.parametrize("alphabeticKey", ["0","0123"])
 @pytest.mark.parametrize("spaceEncrypt", ["0","1"])
-def test_transposition(message, key, alphabeticKey, spaceEncrypt):
-    """Test the caesar function"""
+def test_transposition(message, key, alphabeticKey, spaceEncrypt, caplog):
+    """Test the transposition function"""
+    caplog.set_level(logging.DEBUG)
 
     alphabet = TRC.returnAlphabet(alphabeticKey, spaceEncrypt)
     mode = 0

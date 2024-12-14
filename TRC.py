@@ -209,12 +209,24 @@ def caesar(mode, message, key, alphabet):
 def transposition(mode, msg, key):
     log.debug('Transposition cipher:')
     log.debug(' ')
+
     if mode == 0:
         # Encrypt
         log.debug('Mode T encrypt')
         char = col = 0
         log.debug('char: %s, col: %s' % (char, col))
         translated = ''
+        rem = len(msg) % key
+        log.debug('Rem: %s' % rem)
+        rows = m.trunc(len(msg) / key)
+        log.debug('Rows: %s' % rows)
+        decryptRows = rows + 1 if rem > 0 else rows
+        log.debug('DecryptRows: %s' % decryptRows)
+        log.debug(' ')
+
+        while len(msg) < (decryptRows * key):
+            msg += '.'
+        #print(msg)
     
         while char < len(msg) and col < key:
             if not outOfRange(char, msg):
@@ -233,8 +245,8 @@ def transposition(mode, msg, key):
                     char = col
                     log.debug('New char; %s, new col: %s' % (char, col))
                     log.debug(' ')
-                    
-        print('Final encrypted transposition output: %s' % translated)
+
+        log.debug('Final encrypted transposition output: %s' % translated)
         return translated
         
     if mode == 1:
@@ -247,7 +259,7 @@ def transposition(mode, msg, key):
         log.debug('Rem: %s' % rem)
         rows = m.trunc(len(msg) / key)
         log.debug('Rows: %s' % rows)
-        decryptRows = rows + 1 if rem > 0 else rows
+        decryptRows = rows + 1
         log.debug('DecryptRows: %s' % decryptRows)
         log.debug(' ')
         
@@ -259,7 +271,10 @@ def transposition(mode, msg, key):
             
             translated += msg[char]
             log.debug('Adding: %s' % msg[char])
-            char += decryptRows
+            if col >= rem:
+                char += decryptRows - 1
+            else:
+                char += decryptRows
             log.debug('New char: %s' % char)
             log.debug(' ')
             
@@ -272,7 +287,7 @@ def transposition(mode, msg, key):
                     log.debug(' ')
                     continue
         
-        print('Final decrypted transposition output: %s' % translated)
+        log.debug('Final decrypted transposition output: %s' % translated)
         return translated
 
 def translate(key, mode, message, alphabet):
