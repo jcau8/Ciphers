@@ -16,7 +16,7 @@ The next cipher that will be incorporated into this program is the hill cipher, 
 <details open><summary><b>v2.3.1 - Dec 15, 2024</b></summary>
 <ul>
   <li>Added padding and decrypting will auto delete padding</li>
-  <li>Added pytese</li>
+  <li>Added pytest</li>
   <li>Fixed #5</li>
 </ul>
 </br>
