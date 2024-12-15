@@ -13,16 +13,7 @@ With the Caesar cipher you can choose what alphabets you would like to encode in
 The next cipher that will be incorporated into this program is the hill cipher, it is based on linear algebra. TRC v2.3.0 will be converted into batch script as well.
 
 ## Changelog
-<details open><summary><b>v2.3.1 - Dec 07, 2024</b></summary>
-<ul>
-  <li>Fixed issue #5</li>
-  <li>Added pytest module for imporved testing speed</li>
-  <li>Added padding and decrypting will auto delete padding (so you just have the plain message)</li>
-</ul>
-</br>
-</details>
-
-<details closed><summary><b>v2.3.0 - Dec 07, 2024</b></summary>
+<details open><summary><b>v2.3.0 - Dec 07, 2024</b></summary>
 <ul>
   <li>Added logging system (Set on <code>WARNING</code> by default)</li>
   <li>Merged TRC-DEBUG with TRC
