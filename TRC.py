@@ -192,8 +192,8 @@ def caesar(mode, message, key, alphabet):
             try:
                 translated = translated + alphabet[letterNum]
             except IndexError:
-                print(f'Index is: {letterNum}')
-                print(f'Alphabet len is: {len(alphabet)}')
+                log.debug(f'Index is: {letterNum}')
+                log.debug(f'Alphabet len is: {len(alphabet)}')
             log.debug('C Adding: %s' % alphabet[letterNum])
             log.debug(' ')
             
@@ -224,9 +224,10 @@ def transposition(mode, msg, key):
         log.debug('DecryptRows: %s' % decryptRows)
         log.debug(' ')
 
-        while len(msg) < (decryptRows * key):
-            msg += '.'
-        #print(msg)
+        dif = (decryptRows * key) - len(msg)
+        if dif > 0:
+            for i in range(dif):
+                msg += '⅌'
     
         while char < len(msg) and col < key:
             if not outOfRange(char, msg):
@@ -259,7 +260,7 @@ def transposition(mode, msg, key):
         log.debug('Rem: %s' % rem)
         rows = m.trunc(len(msg) / key)
         log.debug('Rows: %s' % rows)
-        decryptRows = rows + 1
+        decryptRows = rows + 1 if rem > 0 else rows
         log.debug('DecryptRows: %s' % decryptRows)
         log.debug(' ')
         
@@ -271,10 +272,7 @@ def transposition(mode, msg, key):
             
             translated += msg[char]
             log.debug('Adding: %s' % msg[char])
-            if col >= rem:
-                char += decryptRows - 1
-            else:
-                char += decryptRows
+            char += decryptRows
             log.debug('New char: %s' % char)
             log.debug(' ')
             
@@ -287,6 +285,8 @@ def transposition(mode, msg, key):
                     log.debug(' ')
                     continue
         
+        translated = translated.rstrip('⅌')
+
         log.debug('Final decrypted transposition output: %s' % translated)
         return translated
 
