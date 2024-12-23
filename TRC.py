@@ -113,7 +113,7 @@ def returnAlphabet(alphabeticKey, spaceEncrypt):
     LOWERCASE = 'abcdefghijklmnopqrstuvwxyz'
     UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     NUMERIC = '1234567890'
-    SYMBOLS = '`-=[]\;,./~!@#$%^&*()_+{}|:"<>?'
+    SYMBOLS = '`-=[]\\;,./~!@#$%^&*()_+{}|:"<>?'
     SPACE = ' '
     
     finalAlphabet = ''
@@ -177,7 +177,7 @@ def caesar(mode, message, key, alphabet):
                 log.debug(' ')
             
             # Handling the wrap around
-            if letterNum > len(alphabet):
+            if letterNum >= len(alphabet):
                 log.debug('Wrap around 1')
                 letterNum -= len(alphabet)
                 log.debug('New letterNum: %s' % letterNum)
@@ -192,8 +192,8 @@ def caesar(mode, message, key, alphabet):
             try:
                 translated = translated + alphabet[letterNum]
             except IndexError:
-                print(f'Index is: {letterNum}')
-                print(f'Alphabet len is: {len(alphabet)}')
+                log.debug(f'Index is: {letterNum}')
+                log.debug(f'Alphabet len is: {len(alphabet)}')
             log.debug('C Adding: %s' % alphabet[letterNum])
             log.debug(' ')
             
@@ -209,12 +209,25 @@ def caesar(mode, message, key, alphabet):
 def transposition(mode, msg, key):
     log.debug('Transposition cipher:')
     log.debug(' ')
+
     if mode == 0:
         # Encrypt
         log.debug('Mode T encrypt')
         char = col = 0
         log.debug('char: %s, col: %s' % (char, col))
         translated = ''
+        rem = len(msg) % key
+        log.debug('Rem: %s' % rem)
+        rows = m.trunc(len(msg) / key)
+        log.debug('Rows: %s' % rows)
+        decryptRows = rows + 1 if rem > 0 else rows
+        log.debug('DecryptRows: %s' % decryptRows)
+        log.debug(' ')
+
+        dif = (decryptRows * key) - len(msg)
+        if dif > 0:
+            for i in range(dif):
+                msg += '⅌'
     
         while char < len(msg) and col < key:
             if not outOfRange(char, msg):
@@ -233,7 +246,7 @@ def transposition(mode, msg, key):
                     char = col
                     log.debug('New char; %s, new col: %s' % (char, col))
                     log.debug(' ')
-                    
+
         log.debug('Final encrypted transposition output: %s' % translated)
         return translated
         
@@ -272,6 +285,8 @@ def transposition(mode, msg, key):
                     log.debug(' ')
                     continue
         
+        translated = translated.rstrip('⅌')
+
         log.debug('Final decrypted transposition output: %s' % translated)
         return translated
 
