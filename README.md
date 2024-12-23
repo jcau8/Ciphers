@@ -29,6 +29,7 @@ The next cipher that will be incorporated into this program is the hill cipher, 
   <li>Added padding and decrypting will auto delete padding</li>
   <li>Added pytest</li>
   <li>Fixed #5</li>
+  <li>Created .gitignore</li>
 </ul>
 </br>
 </details>
