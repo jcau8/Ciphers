@@ -5,26 +5,37 @@
 
 #
 
-Transopition (T) </br>
-Reverse (R) </br>
-Caesar (C) </br>
+Transopition (T) <br />
+Reverse (R) <br />
+Caesar (C) <br />
+Hill (H) <br />
 
-With the Caesar cipher you can choose what alphabets you would like to encode in. When the option "alphabetic key" appears you can type 0, 1, 2 and or 3 these each corespond to an alphabet; type "0123" for maximum encryption security, this makes use of all of the alphabets.
+With the Caesar cipher you can choose what alphabets you would like to encode in. When the option "alphabetic key" appears you can type 0, 1, 2 and or 3, each of these numbers correspond to an alphabet; type "0123" for maximum encryption security, this makes use of all of the alphabets.
 
 <br />
 
 > [!TIP]
-> The ideal key is around half of your message's length, as longer keys than that may result in text being more understandable!
+> The ideal numeric key is around half of your message's length, as longer keys than that may result in text being more understandable!
 
 <br />
 
 ## Planned Features
-The next cipher that will be incorporated into this program is the hill cipher, it is based on linear algebra. File support; .txt and maybe others.
+File support; .txt and maybe other file types. A unicode alphabet to encrypt with and auto generated random (seed) encryption keys.
 
 <br />
 
 ## Changelog
-<details open><summary><b>v2.3.1 - Dec 15, 2024</b></summary>
+<details open><summary><b>v2.4.1 - Feb 26, 2025</b></summary>
+<ul>
+  <li>Added hill cipher</li>
+  <li>Converted to numpy instead of math</li>
+  <li>Changed padding character</li>
+  <li>/li>
+</ul>
+</br>
+</details>
+
+<details closed><summary><b>v2.3.1 - Dec 15, 2024</b></summary>
 <ul>
   <li>Added padding and decrypting will auto delete padding</li>
   <li>Added pytest</li>

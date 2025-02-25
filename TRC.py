@@ -1,5 +1,5 @@
 # Transposition Reverse Caesar cipher Program
-import math as m
+import numpy as np
 import logging
 
 # Initiate logger
@@ -10,6 +10,13 @@ logging.basicConfig(level=logLevel, format='%(levelname)s: %(message)s')
 def outOfRange(char, msg):
     # Simple range check 
     return char >= len(msg)
+
+def tryParseAlphabeticString(string):
+    for i in range(len(string)):
+        if string[i] not in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ':
+            return False
+        
+    return True
 
 def tryParseInt(string):
     # You could also use .isdigit() instead
@@ -24,7 +31,7 @@ def tryParseInt(string):
 def getKey(alphabetLength):
     # Gets a valid key
     i = 0
-    print('Please enter a key (1 - %s)' % alphabetLength)
+    print('Please enter a numeric key (1 - %s)' % alphabetLength)
     key = input()
     
     while True:
@@ -52,7 +59,27 @@ def getKey(alphabetLength):
             break
     
     return int(key) # Returns the key as a valid integer
+
+def getHillKey(matrixSize):
+    print('Please enter a %s character text key (A-Z):' % matrixSize)
+    key = input()
+
+    while len(key) != matrixSize or not tryParseAlphabeticString(key) or key == '':
+        print('Please enter a valid key')
+        key = input()
+
+    return key
+
+
+def getMatrixSize():
+    size = input()
+
+    while not tryParseInt(size):
+        size = input()
+
+    return int(size)
             
+
 def getMessage():
     print('Please enter your message')
     message = input()
@@ -218,7 +245,7 @@ def transposition(mode, msg, key):
         translated = ''
         rem = len(msg) % key
         log.debug('Rem: %s' % rem)
-        rows = m.trunc(len(msg) / key)
+        rows = np.trunc(len(msg) / key)
         log.debug('Rows: %s' % rows)
         decryptRows = rows + 1 if rem > 0 else rows
         log.debug('DecryptRows: %s' % decryptRows)
@@ -227,7 +254,7 @@ def transposition(mode, msg, key):
         dif = (decryptRows * key) - len(msg)
         if dif > 0:
             for i in range(dif):
-                msg += '⅌'
+                msg += "ꣾ"
     
         while char < len(msg) and col < key:
             if not outOfRange(char, msg):
@@ -258,7 +285,7 @@ def transposition(mode, msg, key):
         log.debug('char: %s, col: %s' % (char, col))
         rem = len(msg) % key
         log.debug('Rem: %s' % rem)
-        rows = m.trunc(len(msg) / key)
+        rows = np.trunc(len(msg) / key)
         log.debug('Rows: %s' % rows)
         decryptRows = rows + 1 if rem > 0 else rows
         log.debug('DecryptRows: %s' % decryptRows)
@@ -285,12 +312,81 @@ def transposition(mode, msg, key):
                     log.debug(' ')
                     continue
         
-        translated = translated.rstrip('⅌')
+        translated = translated.rstrip("ꣾ")
 
         log.debug('Final decrypted transposition output: %s' % translated)
         return translated
 
-def translate(key, mode, message, alphabet):
+def hill(mode, msg, key, matrixSize):
+    log.debug('Hill Cipher:')
+    log.debug(' ')
+    keyMatrix = np.zeros((matrixSize, matrixSize), dtype=int).reshape(3,3)
+    textVector = np.zeros((matrixSize, 1), dtype=int).reshape(3,1)
+    cipherVector = np.zeros((matrixSize, 1), dtype=int).reshape(3,1)
+    vectorDict = {}
+    translated = ''
+
+    k = 0
+    for i in range(len(key)):
+        for x in range(len(key)):
+            keyMatrix[i][x] = ord(key(k))
+            log.debug(keyMatrix)
+            k += 1
+            log.debug(k)
+
+    rem = len(msg) % matrixSize
+    while rem != 0:
+        msg += "ꣾ"
+        log.debug('New msg: %s' % msg)
+        rem = len(msg) % matrixSize
+        log.debug('New rem: %s' % rem)
+
+    
+    numVecs = len(msg) / matrixSize
+    log.debug(numVecs)
+    for i in range(numVecs):
+        vectorDict[f'tvec{i}'] = textVector
+        log.debug(vectorDict)
+        vectorDict[f'cvec{i}'] = cipherVector
+        log.debug(vectorDict)
+
+    if mode == 1:
+        log.debug('Hill Decrypt:')
+        keyMatrix = np.linalg.inv(keyMatrix)
+    else:
+        log.debug('Hill Encrypt:')
+
+    
+    log.debug()
+
+    index = 0
+    for i in range(numVecs):
+        log.debug(i)
+        for x in range(matrixSize):
+            log.debug(x)
+            vectorDict[f'tvec{i}'][x] = ord(msg[index])
+            log.debug(vectorDict)
+            index += 1
+            log.debug(index)
+
+    for i in range(numVecs):
+        vectorDict[f'cvec{i}'] = np.dot(keyMatrix, vectorDict[f'tvec{i}']) % 26
+        log.debug(vectorDict)
+        log.debug(i)
+
+    for i in range(numVecs):
+        log.debug(i)
+        for x in range(matrixSize):
+            log.debug(x)
+            translated += chr(int(str(vectorDict[f'cvec{i}'][x].strip('[]'))))
+            log.debug(translated)
+
+    return translated
+    
+    
+    
+
+def translate(key, mode, message, alphabet, hillKey, matrixSize):
     log.debug(' ')
     translated = ''
     # If mode is decrypt then reverse the cipher first
@@ -301,7 +397,11 @@ def translate(key, mode, message, alphabet):
     
     translatedCaesar = caesar(mode, message, key, alphabet)
     log.debug(translatedCaesar)
-    translated = transposition(mode, translatedCaesar, key)
+    translatedTransCaesar = transposition(mode, translatedCaesar, key)
+    log.debug(translatedCaesar)
+    translated = hill(mode, translatedTransCaesar, hillKey, matrixSize)
+    log.debug(translated)
+
     
     if mode == 0:
         log.debug('Mode E, reversing message...')
@@ -313,12 +413,15 @@ def translate(key, mode, message, alphabet):
 
 if __name__ == '__main__':
     gMode = getMode()
+
     alphabeticKey, spaceEncrypt = getAlphabeticKey()
     alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
-    key = getKey(len(alphabet))
+    numKey = getKey(len(alphabet))
+    matrixSize = getMatrixSize()
+    hillKey = getHillKey(matrixSize)
     gMessage = getMessage()
 
     print()
     print('Below is your translated text:\n')
     log.debug(' ')
-    print(translate(key, gMode, gMessage, alphabet))
+    print(translate(numKey, gMode, gMessage, alphabet, hillKey, matrixSize))
