@@ -1,8 +1,8 @@
-import TRC
+import TRCH
 import pytest
 import logging
 
-TRC.logLevel = logging.DEBUG
+TRCH.logLevel = logging.DEBUG
 
 @pytest.fixture
 def message():
@@ -17,11 +17,11 @@ def message():
 def test_caesar(message, key, alphabeticKey, spaceEncrypt):
     """Test the caesar function"""
 
-    alphabet = TRC.returnAlphabet(alphabeticKey, spaceEncrypt)
+    alphabet = TRCH.returnAlphabet(alphabeticKey, spaceEncrypt)
     mode = 0
-    encoded = TRC.caesar(mode, message, key, alphabet)
+    encoded = TRCH.caesar(mode, message, key, alphabet)
     mode = 1
-    decoded = TRC.caesar(mode, encoded, key, alphabet)
+    decoded = TRCH.caesar(mode, encoded, key, alphabet)
     assert message == decoded
 
 @pytest.mark.skip
@@ -32,11 +32,11 @@ def test_transposition(message, key, alphabeticKey, spaceEncrypt, caplog):
     """Test the transposition function"""
     caplog.set_level(logging.DEBUG)
 
-    alphabet = TRC.returnAlphabet(alphabeticKey, spaceEncrypt)
+    alphabet = TRCH.returnAlphabet(alphabeticKey, spaceEncrypt)
     mode = 0
-    encoded = TRC.transposition(mode, message, key)
+    encoded = TRCH.transposition(mode, message, key)
     mode = 1
-    decoded = TRC.transposition(mode, encoded, key)
+    decoded = TRCH.transposition(mode, encoded, key)
     assert message == decoded
 
 # @pytest.mark.skip
@@ -46,11 +46,11 @@ def test_transposition(message, key, alphabeticKey, spaceEncrypt, caplog):
 def test_transcode(message, key, alphabeticKey, spaceEncrypt):
     """Test the translate function"""
 
-    alphabet = TRC.returnAlphabet(alphabeticKey, spaceEncrypt)
+    alphabet = TRCH.returnAlphabet(alphabeticKey, spaceEncrypt)
 
     mode = 0
-    encoded = TRC.translate(key, mode, message, alphabet)
+    encoded = TRCH.translate(key, mode, message, alphabet)
     mode = 1
-    decoded = TRC.translate(key, mode, encoded, alphabet)
+    decoded = TRCH.translate(key, mode, encoded, alphabet)
     assert message == decoded
 

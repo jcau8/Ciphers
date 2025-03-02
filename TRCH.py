@@ -1,10 +1,12 @@
 # Transposition Reverse Caesar cipher Program
 import numpy as np
 import logging
+from lib import inverse
+from sympy import Matrix
 
 # Initiate logger
 log = logging.getLogger(__name__)
-logLevel = logging.WARNING
+logLevel = logging.DEBUG
 logging.basicConfig(level=logLevel, format='%(levelname)s: %(message)s')
 
 def outOfRange(char, msg):
@@ -61,10 +63,10 @@ def getKey(alphabetLength):
     return int(key) # Returns the key as a valid integer
 
 def getHillKey(matrixSize):
-    print('Please enter a %s character text key (A-Z):' % matrixSize)
+    print('Please enter a %s character text key (A-Z):' % (matrixSize * matrixSize))
     key = input()
 
-    while len(key) != matrixSize or not tryParseAlphabeticString(key) or key == '':
+    while len(key) != (matrixSize * matrixSize) or not tryParseAlphabeticString(key) or key == '':
         print('Please enter a valid key')
         key = input()
 
@@ -72,9 +74,11 @@ def getHillKey(matrixSize):
 
 
 def getMatrixSize():
+    print('Please enter a matrix size:')
     size = input()
 
     while not tryParseInt(size):
+        print('Please enter a valid matrix size')
         size = input()
 
     return int(size)
@@ -89,6 +93,9 @@ def getMessage():
 def getMode():
     print('Please enter your mode (e = encrypt, d = decrypt)')
     mode = input()
+
+    while mode == '':
+        mode = input()
     
     while mode[0].lower() != 'e' and mode[0].lower() != 'd':
         print('Please enter a valid mode')
@@ -251,7 +258,7 @@ def transposition(mode, msg, key):
         log.debug('DecryptRows: %s' % decryptRows)
         log.debug(' ')
 
-        dif = (decryptRows * key) - len(msg)
+        dif = int((decryptRows * key) - len(msg))
         if dif > 0:
             for i in range(dif):
                 msg += "ꣾ"
@@ -327,9 +334,11 @@ def hill(mode, msg, key, matrixSize):
     translated = ''
 
     k = 0
-    for i in range(len(key)):
-        for x in range(len(key)):
-            keyMatrix[i][x] = ord(key(k))
+    for i in range(matrixSize):
+        log.debug(i)
+        for x in range(matrixSize):
+            log.debug(x)
+            keyMatrix[i][x] = ord(key[k])
             log.debug(keyMatrix)
             k += 1
             log.debug(k)
@@ -342,44 +351,50 @@ def hill(mode, msg, key, matrixSize):
         log.debug('New rem: %s' % rem)
 
     
-    numVecs = len(msg) / matrixSize
+    numVecs = int(len(msg) / matrixSize)
     log.debug(numVecs)
     for i in range(numVecs):
-        vectorDict[f'tvec{i}'] = textVector
+        vectorDict[f'tvec{i}'] = textVector.copy()
         log.debug(vectorDict)
-        vectorDict[f'cvec{i}'] = cipherVector
+        vectorDict[f'cvec{i}'] = cipherVector.copy()
         log.debug(vectorDict)
 
     if mode == 1:
         log.debug('Hill Decrypt:')
-        keyMatrix = np.linalg.inv(keyMatrix)
+        # keyMatrix = np.linalg.inv(keyMatrix) % 26
+        keyMatrix = inverse(keyMatrix, 26)
+        log.debug(f'Hill inv key matrix: {keyMatrix}')
+        charOffset = 0
     else:
         log.debug('Hill Encrypt:')
+        charOffset = 0
 
     
-    log.debug()
+    log.debug(' ')
 
     index = 0
+    log.debug('index: %s' % index)
     for i in range(numVecs):
-        log.debug(i)
+        log.debug('i: %s' % i)
         for x in range(matrixSize):
-            log.debug(x)
+            log.debug('x: %s' % x)
             vectorDict[f'tvec{i}'][x] = ord(msg[index])
             log.debug(vectorDict)
             index += 1
-            log.debug(index)
+            log.debug('index: %s' % index)
 
     for i in range(numVecs):
-        vectorDict[f'cvec{i}'] = np.dot(keyMatrix, vectorDict[f'tvec{i}']) % 26
+        vectorDict[f'cvec{i}'] = np.dot(keyMatrix, vectorDict[f'tvec{i}']) % 26 + charOffset
         log.debug(vectorDict)
         log.debug(i)
 
     for i in range(numVecs):
         log.debug(i)
         for x in range(matrixSize):
-            log.debug(x)
-            translated += chr(int(str(vectorDict[f'cvec{i}'][x].strip('[]'))))
-            log.debug(translated)
+            log.debug('x: %s' % x)
+            log.debug('str vector: %s' % str(vectorDict[f'cvec{i}'][x]))
+            translated += chr(int(str(vectorDict[f'cvec{i}'][x]).strip('[]')))
+            log.debug('translated: %s' % translated)
 
     return translated
     
@@ -412,16 +427,23 @@ def translate(key, mode, message, alphabet, hillKey, matrixSize):
     return translated # Returning translated text
 
 if __name__ == '__main__':
-    gMode = getMode()
+    # gMode = getMode()
 
-    alphabeticKey, spaceEncrypt = getAlphabeticKey()
-    alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
-    numKey = getKey(len(alphabet))
-    matrixSize = getMatrixSize()
-    hillKey = getHillKey(matrixSize)
-    gMessage = getMessage()
+    # alphabeticKey, spaceEncrypt = getAlphabeticKey()
+    # alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
+    # numKey = getKey(len(alphabet))
+    # matrixSize = getMatrixSize()
+    # hillKey = getHillKey(matrixSize)
+    # gMessage = getMessage()
 
     print()
     print('Below is your translated text:\n')
     log.debug(' ')
-    print(translate(numKey, gMode, gMessage, alphabet, hillKey, matrixSize))
+    #print(translate(numKey, gMode, gMessage, alphabet, hillKey, matrixSize))
+    message = 'Hello World!'
+    key = 'LOGBIGAND'
+    encMessage = hill(0, message, key, 3)
+    print(encMessage)
+    decMessage = hill(1, encMessage, key, 3)
+    print(decMessage)
+
