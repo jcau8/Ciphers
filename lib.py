@@ -26,7 +26,7 @@ def get_det(mat, n):
     return det
 
 # Function to get adjoint of mat in adj
-def adjoint(mat, adj):
+def adjoint(mat, adj, mod):
     n = len(mat)
     if n == 1:
         adj[0][0] = 1
@@ -37,18 +37,20 @@ def adjoint(mat, adj):
         for j in range(n):
             get_cof(mat, cof, i, j, n)
             sign = 1 if (i + j) % 2 == 0 else -1
-            adj[j][i] = sign * get_det(cof, n - 1)
+            adj[j][i] = (sign * get_det(cof, n - 1)) % mod
 
 # Function to calculate and store inverse, returns 
 # false if matrix is singular
 def inverse(mat, mod):
     n = len(mat)
-    det = get_det(mat, n)
-    det = pow(int(det), -1, mod)
+    det = get_det(mat, n) % mod
+    # calculate the multiplicative inverse
+    detinv = pow(int(det), -1, mod)
     if det == 0:
         print("Singular matrix, can't find its inverse")
         return None
     adj = [[0] * n for _ in range(n)]
-    adjoint(mat, adj)
-    inv = [[adj[i][j] / det for j in range(n)] for i in range(n)]
+    adjoint(mat, adj, mod)
+    # print(f'Adjoint matrix: {adj}')
+    inv = [[(adj[i][j] * detinv) % mod for j in range(n)] for i in range(n)]
     return inv

@@ -332,13 +332,14 @@ def hill(mode, msg, key, matrixSize):
     cipherVector = np.zeros((matrixSize, 1), dtype=int).reshape(3,1)
     vectorDict = {}
     translated = ''
+    charOffset = ord('a')
 
     k = 0
     for i in range(matrixSize):
         log.debug(i)
         for x in range(matrixSize):
             log.debug(x)
-            keyMatrix[i][x] = ord(key[k])
+            keyMatrix[i][x] = ord(key[k]) - charOffset
             log.debug(keyMatrix)
             k += 1
             log.debug(k)
@@ -364,10 +365,8 @@ def hill(mode, msg, key, matrixSize):
         # keyMatrix = np.linalg.inv(keyMatrix) % 26
         keyMatrix = inverse(keyMatrix, 26)
         log.debug(f'Hill inv key matrix: {keyMatrix}')
-        charOffset = 0
     else:
         log.debug('Hill Encrypt:')
-        charOffset = 0
 
     
     log.debug(' ')
@@ -378,7 +377,7 @@ def hill(mode, msg, key, matrixSize):
         log.debug('i: %s' % i)
         for x in range(matrixSize):
             log.debug('x: %s' % x)
-            vectorDict[f'tvec{i}'][x] = ord(msg[index])
+            vectorDict[f'tvec{i}'][x] = ord(msg[index]) - charOffset
             log.debug(vectorDict)
             index += 1
             log.debug('index: %s' % index)
@@ -440,10 +439,10 @@ if __name__ == '__main__':
     print('Below is your translated text:\n')
     log.debug(' ')
     #print(translate(numKey, gMode, gMessage, alphabet, hillKey, matrixSize))
-    message = 'Hello World!'
-    key = 'LOGBIGAND'
+    message = 'retreatnowxx'
+    key = 'backupabc'
     encMessage = hill(0, message, key, 3)
-    print(encMessage)
+    print(f'Encrypted message: {encMessage}')
     decMessage = hill(1, encMessage, key, 3)
-    print(decMessage)
+    print(f'Decrypted message: {decMessage}')
 
