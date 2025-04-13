@@ -10,7 +10,7 @@ Reverse (R) <br />
 Caesar (C) <br />
 Hill (H) <br />
 
-With the Caesar cipher you can choose what alphabets you would like to encode in. When the option "alphabetic key" appears you can type 0, 1, 2 and or 3, each of these numbers correspond to an alphabet; type "0123" for maximum encryption security, this makes use of all of the alphabets.
+With the Caesar cipher you can choose what alphabets you would like to encode in. When the option "alphabetic key" appears you can type 0, 1, 2 and or 3, each of these numbers correspond to an alphabet; type "0123" for maximum encryption security, this makes use of all of the alphabets. You may get 'a' at the end of your message, this is pretty much unavoidable due to the nature of the hill cipher. The development of this program will not continue due to issues with compatibility.
 
 <br />
 
@@ -19,18 +19,30 @@ With the Caesar cipher you can choose what alphabets you would like to encode in
 
 <br />
 
-## Planned Features
-File support; .txt and maybe other file types. A unicode alphabet to encrypt with and auto generated random (seed) encryption keys.
-
-<br />
-
 ## Changelog
-<details open><summary><b>v2.4.1 - Feb 26, 2025</b></summary>
+<details open><summary><b>v2.5.2 - Apr 14, 2025</b></summary>
+<ul>
+  <li>Fixed many issues with hill cipher</li>
+  <li>Added modulus and determinant comprime error</li>
+  <li>Made ASCII alphabet comprime (may result in 'a' appearing at the end of your message)</li>
+</ul>
+</br>
+</details>
+
+<details closed><summary><b>v2.4.2 - Mar 9, 2025</b></summary>
+<ul>
+  <li>Merged pull request #9</li>
+  <li>Added<code>lib.py</code></li>
+</ul>
+</br>
+</details>
+
+<details closed><summary><b>v2.4.1 - Feb 26, 2025</b></summary>
 <ul>
   <li>Added hill cipher</li>
   <li>Converted to numpy instead of math</li>
   <li>Changed padding character</li>
-  <li>/li>
+  <li>Added<code>lib.py</code></li>
 </ul>
 </br>
 </details>

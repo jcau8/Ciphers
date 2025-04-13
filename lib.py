@@ -1,3 +1,5 @@
+import numpy
+
 # Function to get cofactor of mat[p][q] in cof[][]
 def get_cof(mat, cof, p, q, n):
     i = 0
@@ -44,7 +46,12 @@ def adjoint(mat, adj, mod):
 def inverse(mat, mod):
     n = len(mat)
     det = get_det(mat, n) % mod
+    # Check if det and mod are comprime
+    if numpy.gcd(det, mod) > 1:
+        raise Exception('Inverse Failed! Modulus and Determinant are not comprime.')
+    
     # calculate the multiplicative inverse
+    print(f"Modulus: {mod} Determinant: {det}")
     detinv = pow(int(det), -1, mod)
     if det == 0:
         print("Singular matrix, can't find its inverse")

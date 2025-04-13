@@ -332,7 +332,9 @@ def hill(mode, msg, key, matrixSize):
     cipherVector = np.zeros((matrixSize, 1), dtype=int).reshape(3,1)
     vectorDict = {}
     translated = ''
-    charOffset = ord('a')
+    charOffset = 32
+    mod = 127 - 30
+    
 
     k = 0
     for i in range(matrixSize):
@@ -362,8 +364,7 @@ def hill(mode, msg, key, matrixSize):
 
     if mode == 1:
         log.debug('Hill Decrypt:')
-        # keyMatrix = np.linalg.inv(keyMatrix) % 26
-        keyMatrix = inverse(keyMatrix, 26)
+        keyMatrix = inverse(keyMatrix, mod)
         log.debug(f'Hill inv key matrix: {keyMatrix}')
     else:
         log.debug('Hill Encrypt:')
@@ -383,7 +384,7 @@ def hill(mode, msg, key, matrixSize):
             log.debug('index: %s' % index)
 
     for i in range(numVecs):
-        vectorDict[f'cvec{i}'] = np.dot(keyMatrix, vectorDict[f'tvec{i}']) % 26 + charOffset
+        vectorDict[f'cvec{i}'] = np.dot(keyMatrix, vectorDict[f'tvec{i}']) % mod + charOffset
         log.debug(vectorDict)
         log.debug(i)
 
@@ -395,10 +396,7 @@ def hill(mode, msg, key, matrixSize):
             translated += chr(int(str(vectorDict[f'cvec{i}'][x]).strip('[]')))
             log.debug('translated: %s' % translated)
 
-    return translated
-    
-    
-    
+    return translated    
 
 def translate(key, mode, message, alphabet, hillKey, matrixSize):
     log.debug(' ')
@@ -426,23 +424,17 @@ def translate(key, mode, message, alphabet, hillKey, matrixSize):
     return translated # Returning translated text
 
 if __name__ == '__main__':
-    # gMode = getMode()
+    gMode = getMode()
 
-    # alphabeticKey, spaceEncrypt = getAlphabeticKey()
-    # alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
-    # numKey = getKey(len(alphabet))
-    # matrixSize = getMatrixSize()
-    # hillKey = getHillKey(matrixSize)
-    # gMessage = getMessage()
+    alphabeticKey, spaceEncrypt = getAlphabeticKey()
+    alphabet = returnAlphabet(alphabeticKey, spaceEncrypt)
+    numKey = getKey(len(alphabet))
+    matrixSize = getMatrixSize()
+    hillKey = getHillKey(matrixSize)
+    gMessage = getMessage()
 
     print()
     print('Below is your translated text:\n')
     log.debug(' ')
-    #print(translate(numKey, gMode, gMessage, alphabet, hillKey, matrixSize))
-    message = 'retreatnowxx'
-    key = 'backupabc'
-    encMessage = hill(0, message, key, 3)
-    print(f'Encrypted message: {encMessage}')
-    decMessage = hill(1, encMessage, key, 3)
-    print(f'Decrypted message: {decMessage}')
+    print(translate(numKey, gMode, gMessage, alphabet, hillKey, matrixSize))
 
