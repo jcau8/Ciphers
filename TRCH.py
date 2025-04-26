@@ -2,7 +2,6 @@
 import numpy as np
 import logging
 from lib import inverse
-from sympy import Matrix
 
 # Initiate logger
 log = logging.getLogger(__name__)
